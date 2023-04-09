@@ -12,27 +12,27 @@ const alertStore = useAlertStore();
 const route = useRoute();
 const id = route.params.id;
 
-let title = 'Add User';
+let title = 'Add Test';
 let user = null;
 if (id) {
     // edit mode
-    title = 'Edit User';
+    title = 'Edit Test';
     ({ user } = storeToRefs(usersStore));
     usersStore.getById(id);
 }
 
 const schema = Yup.object().shape({
+    username: Yup.string()
+        .required('username is required'),
     firstName: Yup.string()
         .required('First Name is required'),
     lastName: Yup.string()
         .required('Last Name is required'),
-    username: Yup.string()
-        .required('Username is required'),
-    password: Yup.string()
-        .transform(x => x === '' ? undefined : x)
-        // password optional in edit mode
-        .concat(user ? null : Yup.string().required('Password is required'))
-        .min(6, 'Password must be at least 6 characters')
+    // password: Yup.string()
+    //     .transform(x => x === '' ? undefined : x)
+    //     // password optional in edit mode
+    //     .concat(user ? null : Yup.string().required('Password is required'))
+    //     .min(6, 'Password must be at least 6 characters')
 });
 
 async function onSubmit(values) {
@@ -59,30 +59,30 @@ async function onSubmit(values) {
         <Form @submit="onSubmit" :validation-schema="schema" :initial-values="user" v-slot="{ errors, isSubmitting }">
             <div class="form-row">
                 <div class="form-group col">
-                    <label>First Name</label>
-                    <Field name="firstName" type="text" class="form-control" :class="{ 'is-invalid': errors.firstName }" />
-                    <div class="invalid-feedback">{{ errors.firstName }}</div>
-                </div>
-                <div class="form-group col">
-                    <label>Last Name</label>
-                    <Field name="lastName" type="text" class="form-control" :class="{ 'is-invalid': errors.lastName }" />
-                    <div class="invalid-feedback">{{ errors.lastName }}</div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col">
-                    <label>Username</label>
+                    <label>Nama</label>
                     <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
                     <div class="invalid-feedback">{{ errors.username }}</div>
                 </div>
                 <div class="form-group col">
+                    <label>Alamat</label>
+                    <Field name="firstName" type="text" class="form-control" :class="{ 'is-invalid': errors.firstName }" />
+                    <div class="invalid-feedback">{{ errors.firstName }}</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Limit Kredit</label>
+                    <Field name="lastName" type="text" class="form-control" :class="{ 'is-invalid': errors.lastName }" />
+                    <div class="invalid-feedback">{{ errors.lastName }}</div>
+                </div>
+                <!-- <div class="form-group col">
                     <label>
                         Password
                         <em v-if="user">(Leave blank to keep the same password)</em>
                     </label>
                     <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
                     <div class="invalid-feedback">{{ errors.password }}</div>
-                </div>
+                </div> -->
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" :disabled="isSubmitting">
